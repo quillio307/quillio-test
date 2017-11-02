@@ -1,0 +1,28 @@
+{
+  "name": "quillio-test",
+  "version": "1.0.0",
+  "description": "Tests for Quillio",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive ./tests/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quillio307/quillio-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quillio307/quillio-test/issues"
+  },
+  "homepage": "https://github.com/quillio307/quillio-test#readme",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "axios": "^0.17.0",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "mongodb": "^2.2.33"
+  }
+}
