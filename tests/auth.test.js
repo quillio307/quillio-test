@@ -12,11 +12,17 @@ var db = undefined
 describe('Authentication Tests', function() {
     before(function(done) {
         connectToDatabase()
-            .then(function(result) {
+            .then((result) => {
                 assert.notEqual(null, result)
                 db = result
+            })
+            .then(() => {
                 done()
             })
+    })
+
+    after(function() {
+        db.close()
     })
 
     describe('Tests Database Connection', function() {
@@ -31,7 +37,7 @@ describe('Authentication Tests', function() {
         })
 
         it('should not create the existing user', function() {
-
+            return true
         })
     })
 
