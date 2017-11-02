@@ -6,6 +6,7 @@ const axios  = require('axios')
     , ObjectId = require('mongodb').ObjectId
 
 const connectToDatabase = require('../index').connectToDatabase
+    , url = require('../index').ENDPOINT
 
 var db = undefined
 
@@ -31,7 +32,7 @@ describe('Authentication Tests', function() {
         })
     })
 
-    describe('Tests User Creation', function() {
+    describe('Tests User Signup', function() {
         it('should create the new user', function() {
             return true
         })
@@ -39,6 +40,18 @@ describe('Authentication Tests', function() {
         it('should not create the existing user', function() {
             return true
         })
+    })
+
+    describe('Tests User Login', function() {
+        it('should not login the unauthenticated user', function() {
+
+        })
+
+        it('should authenticate the existing user', function() {
+
+        })
+
+        it('should not login the ')
     })
 
 })

@@ -2,6 +2,7 @@ const mongodb = require('mongodb')
     , axios = require('axios')
     , assert = require('assert')
 
+const ENDPOINT = 'http://localhost:5000/'
 
 var MongoClient = mongodb.MongoClient
 var url = 'mongodb://ds147884.mlab.com:47884/heroku_4b10n3s4'
