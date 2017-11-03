@@ -17,9 +17,11 @@ var deleteUser = function(email, password) {
             password: password
         })
         .then((res) => {
-            if (res.error && res.error === 'invalid')
-                reject() 
-            resolve()
+            resolve(res)
+        })
+        .catch((err) => {
+            if (err) reject(err)
+            reject()
         })
     })
 }
@@ -32,9 +34,11 @@ var insertUser = function(email, name, password) {
             password: password
         })
         .then((res) => {
-            if (res.error && res.error === 'invalid')
-                reject()
-            resolve()
+            resolve(res)
+        })
+        .catch((err) => {
+            if (err) reject(err)
+            reject()
         })
     })
 }
@@ -51,8 +55,9 @@ describe('Authentication Tests', function() {
                 // remove the dummy users
                 return deleteUser('test@test.com', 'password')
             })
-            .then(() => {
-                done()
+            .then(() => done())
+            .catch((err) => {
+                console.log(err)
             })
     })
 
@@ -61,18 +66,39 @@ describe('Authentication Tests', function() {
     })
 
     describe('Tests Database Connection', function() {
-        it('should assert that the database is not null', function() {
+        it('should validate the database connection', function() {
            should.exist(db) 
         })
     })
 
     describe('Tests User Signup', function() {
-        it('should create the new user', function() {
-            return true
+        it('should create the new user', function(done) {
+            return new Promise((resolve) => {
+                insertUser('test@test.com', 'Test User', 'password')
+                    .then((res) => {
+                        assert.equal(true, true)
+                        resolve()
+                    })
+                    .then(() => done())
+                    .catch((err) => {
+                        if (err) console.log(err)
+                        assert.equal(false, true)
+                        done()
+                    })
+            })
         })
 
         it('should not create the existing user', function() {
-            return true
+            return new Promise((resolve) => {
+                insertUser('test@test.com', 'Different Name', 'password')
+                    .then((res) => {
+                        assert.equal(false, true)
+                    })
+                    .then(() => done())
+                    .catch((err) => {
+
+                    })
+            })
         })
     })
 
@@ -84,8 +110,6 @@ describe('Authentication Tests', function() {
         it('should authenticate the existing user', function() {
 
         })
-
-        it('should not login the ')
     })
 
 })

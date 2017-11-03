@@ -19,5 +19,6 @@ var connectToDatabase = function () {
 }
 
 module.exports = {
-    connectToDatabase
+    connectToDatabase,
+    ENDPOINT
 }
