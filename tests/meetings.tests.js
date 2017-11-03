@@ -17,13 +17,30 @@ var db = undefined
 
 var createMeeting = function(emails, meetingName){
     return new Promise((resolve, reject)=> {
-
+        axios.post(url + 'meetings/create', qs.stringify({
+            emails: emails, 
+            name: meetingName
+        }))
+        .then(() => {
+            resolve('success')
+        })
+        .catch((err) =>{
+            reject('failure')
+        })
     })
 }
 
 var searchMeeting = function(query){
     return new Promise((resolve, reject)=> {
-
+        axios.post(url + 'meetings/search', qs.stringify({
+            query: query
+        }))
+        .then(() => {
+            resolve('success')
+        })
+        .catch((err) => {
+            reject('failure')
+        })
     })
 }
 

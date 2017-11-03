@@ -15,15 +15,32 @@ var assert = chai.assert
 
 var db = undefined
 
-var createGroup = function(emails) {
+var createGroup = function(emails, groupName) {
     return new Promise((resolve, reject) => {
-
+        axios.post(url + 'groups/create', qs.stringify({
+            emails: emails,
+            name: groupName
+        }))
+        .then(() => {
+            resolve('success')
+        })
+        .catch((err) => {
+            reject('failure')
+        })
     })
 }
 
 var searchGroup = function(query){
     return new Promise((resolve, reject)=>{
-
+        axios.post(url + 'groups/search', qs.stringify({
+            query:query
+        }))
+        .then(() => {
+            resolve('success')
+        })
+        .catch((err) => {
+            reject('failure')
+        })
     })
 }
 
@@ -36,7 +53,7 @@ describe('User Group Test', function(){
                 db = result
         })
         .then(() => {
-            return createGroup('ellis93@purdue.edu pkfire@gmail.com')
+            return createGroup('ellis93@purdue.edu pkfire@gmail.com', 'my group')
         })
         .then(()=>{
             return searchGroup('my group')
