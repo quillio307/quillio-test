@@ -1,44 +1,75 @@
 const axios  = require('axios')
+    , qs     = require('qs')
     , chai   = require('chai')
-    , assert = require('chai').assert
-    , expect = require('chai').expect
-    , should = require('chai').should()
     , ObjectId = require('mongodb').ObjectId
+    , chaiAsPromised = require('chai-as-promised')
 
 const connectToDatabase = require('../index').connectToDatabase
     , url = require('../index').ENDPOINT
+
+chai.use(chaiAsPromised)
+
+var assert = chai.assert
+    , expect = chai.expect
+    , should = chai.should()
 
 var db = undefined
 
 var deleteUser = function(email, password) {
     return new Promise((resolve, reject) => {
-        axios.post(url + 'auth/delete', {
+        axios.post(url + 'auth/delete', qs.stringify({
             email: email,
             password: password
-        })
-        .then((res) => {
-            resolve(res)
+        }))
+        .then(() => {
+            resolve('success')
         })
         .catch((err) => {
-            if (err) reject(err)
-            reject()
+            reject('failure')
         })
     })
 }
 
 var insertUser = function(email, name, password) {
     return new Promise((resolve, reject) => {
-        axios.post(url + 'auth/signup', {
+        axios.post(url + 'auth/signup', qs.stringify({
             email: email,
             name: name,
             password: password
-        })
+        }))
         .then((res) => {
-            resolve(res)
+            resolve('success')
         })
         .catch((err) => {
+            reject('failure')
+        })
+    })
+}
+
+var loginUser = function(email, password) {
+    return new Promise((resolve, reject) => {
+        axios.post(url + 'auth/login', qs.stringify({
+            email: email,
+            password: password
+        }))
+        .then((res) => {
+            resolve('success')
+        })
+        .catch((err) => {
+
+        })
+    })
+}
+
+var authenticateUser = function(email) {
+    return new Promise((resolve, reject) => {
+        db.collection('users').updateOne({
+            email: email
+        }, {
+            $set: { authenticated: true }
+        }, (err, res) => {
             if (err) reject(err)
-            reject()
+            resolve('success')
         })
     })
 }
@@ -57,7 +88,7 @@ describe('Authentication Tests', function() {
             })
             .then(() => done())
             .catch((err) => {
-                console.log(err)
+                if (err) console.log(err)
             })
     })
 
@@ -72,43 +103,35 @@ describe('Authentication Tests', function() {
     })
 
     describe('Tests User Signup', function() {
-        it('should create the new user', function(done) {
-            return new Promise((resolve) => {
-                insertUser('test@test.com', 'Test User', 'password')
-                    .then((res) => {
-                        assert.equal(true, true)
-                        resolve()
-                    })
-                    .then(() => done())
-                    .catch((err) => {
-                        if (err) console.log(err)
-                        assert.equal(false, true)
-                        done()
-                    })
-            })
+
+        it('should create the new user', function() {
+            return Promise.resolve(insertUser('test@test.com', 'Test User', 'password'))
+                .should
+                .eventually
+                .equal('success')
         })
 
         it('should not create the existing user', function() {
-            return new Promise((resolve) => {
-                insertUser('test@test.com', 'Different Name', 'password')
-                    .then((res) => {
-                        assert.equal(false, true)
-                    })
-                    .then(() => done())
-                    .catch((err) => {
-
-                    })
-            })
+            return Promise.resolve(insertUser('test@test.com', 'Test User2', 'password'))
+                .should
+                .eventually
+                .equal('success')
         })
     })
 
     describe('Tests User Login', function() {
         it('should not login the unauthenticated user', function() {
-
+            return Promise.resolve(loginUser('test@test.com', 'password'))
+                .should
+                .eventually
+                .equal('success')
         })
 
-        it('should authenticate the existing user', function() {
-
+        it('should authenticate and login the existing user', function() {
+            return Promise.resolve(authenticateUser('test@test.com'))
+                .should
+                .eventually
+                .equal('success')
         })
     })
 
