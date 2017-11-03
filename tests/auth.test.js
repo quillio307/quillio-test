@@ -10,12 +10,46 @@ const connectToDatabase = require('../index').connectToDatabase
 
 var db = undefined
 
+var deleteUser = function(email, password) {
+    return new Promise((resolve, reject) => {
+        axios.post(url + 'auth/delete', {
+            email: email,
+            password: password
+        })
+        .then((res) => {
+            if (res.error && res.error === 'invalid')
+                reject() 
+            resolve()
+        })
+    })
+}
+
+var insertUser = function(email, name, password) {
+    return new Promise((resolve, reject) => {
+        axios.post(url + 'auth/signup', {
+            email: email,
+            name: name,
+            password: password
+        })
+        .then((res) => {
+            if (res.error && res.error === 'invalid')
+                reject()
+            resolve()
+        })
+    })
+}
+
 describe('Authentication Tests', function() {
     before(function(done) {
         connectToDatabase()
             .then((result) => {
+                // establish the db connection
                 assert.notEqual(null, result)
                 db = result
+            })
+            .then(() => {
+                // remove the dummy users
+                return deleteUser('test@test.com', 'password')
             })
             .then(() => {
                 done()
