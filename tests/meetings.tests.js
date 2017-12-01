@@ -15,11 +15,12 @@ var assert = chai.assert
 
 var db = undefined
 
-var createMeeting = function(emails, meetingName){
+var createMeeting = function(emails, meetingName, meeting_nature){
     return new Promise((resolve, reject)=> {
         axios.post(url + 'meetings/create', qs.stringify({
             emails: emails, 
-            name: meetingName
+            name: meetingName,
+            nature: meeting_nature
         }))
         .then(() => {
             resolve('success')
